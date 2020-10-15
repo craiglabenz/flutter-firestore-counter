@@ -1,3 +1,4 @@
+import 'package:firebasecounter/counter_manager.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,12 +28,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
+  final manager = CounterManager();
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    setState(() => manager.increment());
   }
 
   @override
@@ -45,11 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text('You have pushed the button this many times:'),
             Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
+              '${manager.count}',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
