@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         // Reference `widget.manager` instead of `manager` directly
-        onPressed: () => setState(() => widget.manager.increment()),
+        onPressed: () => widget.manager.increment(),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),

@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebasecounter/app_state.dart';
+import 'package:flutter/material.dart';
 
 /// Interface that defines the functions required to manipulate
 /// the app state.
 ///
 /// Defined as an abstract class so that tests can operate on a
 /// version that does not communicate with Firebase.
-abstract class ICounterManager {
+abstract class ICounterManager extends ChangeNotifier {
   /// Any `CounterManager` must have an instance of the state
   /// object.
   AppState state;
@@ -17,12 +18,21 @@ abstract class ICounterManager {
   void increment();
 }
 
-class CounterManager implements ICounterManager {
+class CounterManager extends ChangeNotifier implements ICounterManager {
   AppState state = AppState();
-  void increment() => state = state.copyWith(DateTime.now());
+
+  /// Copies the state object with the timestamp of the most
+  /// recent click and tells the stream to update.
+  void increment() {
+    state = state.copyWith(DateTime.now());
+    // Adding this line is how `ChangeNotifier` tells widgets to
+    // re-render themselves.
+    notifyListeners();
+  }
 }
 
-class FirestoreCounterManager implements ICounterManager {
+class FirestoreCounterManager extends ChangeNotifier
+    implements ICounterManager {
   AppState state;
   final FirebaseFirestore _firestore;
   FirestoreCounterManager()
@@ -51,6 +61,7 @@ class FirestoreCounterManager implements ICounterManager {
           .toList();
       // Part 7
       state = AppState(_clicks);
+      notifyListeners();
     });
   }
 
