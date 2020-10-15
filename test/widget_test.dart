@@ -8,16 +8,22 @@
 import 'package:firebasecounter/counter_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:firebasecounter/dependencies.dart';
 import 'package:firebasecounter/main.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(
-      MaterialApp(
-        home: MyHomePage(
-          manager: CounterManager(),
-          title: 'Test Widget',
+      TestDependenciesProvider(
+        child: MaterialApp(
+          home: Consumer<ICounterManager>(
+            builder: (context, manager, _child) => MyHomePage(
+              manager: manager,
+              title: 'Flutter Test Home Page',
+            ),
+          ),
         ),
       ),
     );

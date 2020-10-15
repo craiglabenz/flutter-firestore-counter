@@ -16,3 +16,19 @@ class DependenciesProvider extends StatelessWidget {
     );
   }
 }
+
+class TestDependenciesProvider extends StatelessWidget {
+  final Widget child;
+  TestDependenciesProvider({@required this.child});
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ICounterManager>(
+          create: (context) => CounterManager(),
+        ),
+      ],
+      child: child,
+    );
+  }
+}
