@@ -1,8 +1,12 @@
+import 'package:firebasecounter/dependencies.dart';
 import 'package:firebasecounter/counter_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    DependenciesProvider(child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,25 +18,26 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Consumer<ICounterManager>(
+        builder: (context, manager, _child) => MyHomePage(
+          manager: manager,
+          title: 'Flutter Demo Home Page',
+        ),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  final ICounterManager manager;
+  MyHomePage({@required this.manager, Key key, this.title}) : super(key: key);
   final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final manager = CounterManager();
-  void _incrementCounter() {
-    setState(() => manager.increment());
-  }
-
+  // No longer expect to receive a `ICounterManager object`
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,14 +50,17 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text('You have pushed the button this many times:'),
             Text(
-              '${manager.count}',
+              // Reference `widget.manager` instead of
+              // `manager` directly
+              '${widget.manager.state.count}',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        // Reference `widget.manager` instead of `manager` directly
+        onPressed: () => setState(() => widget.manager.increment()),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
