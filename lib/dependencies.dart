@@ -9,7 +9,8 @@ class DependenciesProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<ICounterManager>(create: (context) => CounterManager()),
+        Provider<ICounterManager>(
+            create: (context) => FirestoreCounterManager()),
       ],
       child: child,
     );

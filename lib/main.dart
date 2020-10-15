@@ -1,5 +1,6 @@
 import 'package:firebasecounter/dependencies.dart';
 import 'package:firebasecounter/counter_manager.dart';
+import 'package:firebasecounter/firebase_waiter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,10 +19,16 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Consumer<ICounterManager>(
-        builder: (context, manager, _child) => MyHomePage(
-          manager: manager,
-          title: 'Flutter Demo Home Page',
+      home: FirebaseWaiter(
+        builder: (context) => Consumer<ICounterManager>(
+          builder: (context, manager, _child) => MyHomePage(
+            manager: manager,
+            title: 'Flutter Demo Home Page',
+          ),
+        ),
+        // This is a great place to put your splash page!
+        waitingChild: Scaffold(
+          body: const Center(child: CircularProgressIndicator()),
         ),
       ),
     );
